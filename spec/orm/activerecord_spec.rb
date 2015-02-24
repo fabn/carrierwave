@@ -388,6 +388,18 @@ describe CarrierWave::ActiveRecord do
         expect(@event.image_changed?).to be_true
         expect(@event.changed_for_autosave?).to be_true
       end
+
+      it "should not mark image as changed when setting to nil" do
+        @event.image = nil
+        expect(@event.image_changed?).to be_false
+      end
+
+      it "should not include image in previous_changes when saving with empty remote_image_url" do
+        @event.remote_image_url = ''
+        @event.save!
+        expect(@event.previous_changes).to_not have_key "image"
+      end
+
     end
 
     describe "remove_image!" do
